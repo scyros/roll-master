@@ -1,0 +1,44 @@
+[
+  {
+    "expression": "4d6",
+    "results": {
+      "roll": "4d6",
+      "rolls": {
+        "d0": { "rolls": [5] },
+        "d1": { "rolls": [4] },
+        "d2": { "rolls": [2] },
+        "d3": { "rolls": [4] }
+      },
+      "sum": 15
+    },
+    "rolls": [5, 4, 2, 4]
+  },
+  {
+    "expression": "4d6r1",
+    "results": {
+      "roll": "4d6",
+      "rolls": {
+        "d0": { "rolls": [5] },
+        "d1": { "rolls": [4] },
+        "d2": { "rolls": [2, 5], "rerolled": true },
+        "d3": { "rolls": [4] }
+      },
+      "sum": 18
+    },
+    "rolls": [5, 4, 2, 4]
+  },
+  {
+    "expression": "4d6!1",
+    "results": {
+      "roll": "4d6",
+      "rolls": {
+        "d0": { "rolls": [5] },
+        "d1": { "rolls": [4] },
+        "d2": { "rolls": [2], "discarded": true },
+        "d3": { "rolls": [4] }
+      },
+      "sum": 13
+    },
+    "rolls": [5, 4, 2, 4]
+  }
+]

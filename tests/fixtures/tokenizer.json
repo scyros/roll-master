@@ -1,0 +1,217 @@
+[
+  {
+    "expression": "1d20",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "1d20",
+        "position": 1
+      }
+    ]
+  },
+  {
+    "expression": "1d20+1d6",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "1d20",
+        "position": 1
+      },
+      {
+        "type": "OPERATOR",
+        "value": "+",
+        "position": 5
+      },
+      {
+        "type": "ROLL",
+        "value": "1d6",
+        "position": 6
+      }
+    ]
+  },
+  {
+    "expression": "2d20r1",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "2d20r1",
+        "position": 1
+      }
+    ]
+  },
+  {
+    "expression": "4d6r1!1s-",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "4d6r1!1s-",
+        "position": 1
+      }
+    ]
+  },
+  {
+    "expression": "4d6r1!1",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "4d6r1!1",
+        "position": 1
+      }
+    ]
+  },
+  {
+    "expression": "4d6r1",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "4d6r1",
+        "position": 1
+      }
+    ]
+  },
+  {
+    "expression": "(1d20+1d6)*2",
+    "tokens": [
+      {
+        "type": "LPAREN",
+        "value": "(",
+        "position": 1
+      },
+      {
+        "type": "ROLL",
+        "value": "1d20",
+        "position": 2
+      },
+      {
+        "type": "OPERATOR",
+        "value": "+",
+        "position": 6
+      },
+      {
+        "type": "ROLL",
+        "value": "1d6",
+        "position": 7
+      },
+      {
+        "type": "RPAREN",
+        "value": ")",
+        "position": 10
+      },
+      {
+        "type": "OPERATOR",
+        "value": "*",
+        "position": 11
+      },
+      {
+        "type": "NUMBER",
+        "value": "2",
+        "position": 12
+      }
+    ]
+  },
+  {
+    "expression": "  ; 1d20+1d6 ,",
+    "tokens": [
+      {
+        "type": "IGNORE",
+        "value": "  ",
+        "position": 1
+      },
+      {
+        "type": "IGNORE",
+        "value": ";",
+        "position": 3
+      },
+      {
+        "type": "IGNORE",
+        "value": " ",
+        "position": 4
+      },
+      {
+        "type": "ROLL",
+        "value": "1d20",
+        "position": 5
+      },
+      {
+        "type": "OPERATOR",
+        "value": "+",
+        "position": 9
+      },
+      {
+        "type": "ROLL",
+        "value": "1d6",
+        "position": 10
+      },
+      {
+        "type": "IGNORE",
+        "value": " ",
+        "position": 13
+      },
+      {
+        "type": "IGNORE",
+        "value": ",",
+        "position": 14
+      }
+    ]
+  },
+  {
+    "expression": "1d20; # very large comment",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "1d20",
+        "position": 1
+      },
+      {
+        "type": "IGNORE",
+        "value": ";",
+        "position": 5
+      },
+      {
+        "type": "IGNORE",
+        "value": " ",
+        "position": 6
+      },
+      {
+        "type": "IGNORE",
+        "value": "# very large comment",
+        "position": 7
+      }
+    ]
+  },
+  {
+    "expression": "1d20; # very large comment\n1d6",
+    "tokens": [
+      {
+        "type": "ROLL",
+        "value": "1d20",
+        "position": 1
+      },
+      {
+        "type": "IGNORE",
+        "value": ";",
+        "position": 5
+      },
+      {
+        "type": "IGNORE",
+        "value": " ",
+        "position": 6
+      },
+      {
+        "type": "IGNORE",
+        "value": "# very large comment",
+        "position": 7
+      },
+      {
+        "type": "IGNORE",
+        "value": "\n",
+        "position": 27
+      },
+      {
+        "type": "ROLL",
+        "value": "1d6",
+        "position": 28
+      }
+    ]
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "expression": "(1d6--1",
+    "message": "Invalid expression. Incomplete expression."
+  },
+  {
+    "expression": "1d6--1)",
+    "message": "Invalid expression. Incomplete expression."
+  },
+  {
+    "expression": "1d6--1))",
+    "message": "Invalid expression. Incomplete expression."
+  },
+  {
+    "expression": "dd6*1",
+    "message": "Unexpected token at 0 (dd6*1)"
+  },
+  {
+    "expression": "1d6.2.2",
+    "message": "Unexpected token at 3 (.2.2)"
+  },
+  {
+    "expression": "1d6.2",
+    "message": "Unexpected token at 3 (.2)"
+  },
+  {
+    "expression": "1d6..2..4",
+    "message": "Invalid expression. It should be a roll result."
+  },
+  {
+    "expression": "1d6**(2)",
+    "message": "Invalid expression. Incomplete expression."
+  },
+  {
+    "expression": "4..2",
+    "message": "Invalid expression. It should be a roll result."
+  },
+  {
+    "expression": "4d6r7",
+    "message": "Reroll must be less than or equal to count"
+  },
+  {
+    "expression": "4d6!7",
+    "message": "Discard must be less than count"
+  },
+  {
+    "expression": "-4d6",
+    "message": "Invalid expression. Incomplete expression."
+  },
+  {
+    "expression": "4.3d6",
+    "message": "Unexpected token at 1 (.3d6)"
+  },
+  {
+    "expression": "4d6.3",
+    "message": "Unexpected token at 3 (.3)"
+  },
+  {
+    "expression": "4d0",
+    "message": "Sides must be greater than 0"
+  },
+  {
+    "expression": "4d0.3",
+    "message": "Sides must be greater than 0"
+  },
+  {
+    "expression": "4d6r-1",
+    "message": "Unexpected token at 3 (r-1)"
+  },
+  {
+    "expression": "4d6r",
+    "message": "Unexpected token at 3 (r)"
+  },
+  {
+    "expression": "4d6!-1",
+    "message": "Unexpected token at 3 (!-1)"
+  },
+  {
+    "expression": "4d6!",
+    "message": "Unexpected token at 3 (!)"
+  },
+  {
+    "expression": "4d6!!",
+    "message": "Unexpected token at 3 (!!)"
+  },
+  {
+    "expression": "4d6s",
+    "message": "Unexpected token at 3 (s)"
+  },
+  {
+    "expression": "4d6r1r1",
+    "message": "Unexpected token at 5 (r1)"
+  },
+  {
+    "expression": "4d6!1!1",
+    "message": "Unexpected token at 5 (!1)"
+  },
+  {
+    "expression": "4d6s-s-",
+    "message": "Unexpected token at 5 (s-)"
+  }
+]
