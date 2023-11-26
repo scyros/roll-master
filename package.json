@@ -30,6 +30,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "postinstall": "git config core.hooksPath git-hooks",
     "test": "jest",
     "test:watch": "jest --watch"
   },

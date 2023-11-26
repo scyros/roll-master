@@ -1,0 +1,36 @@
+#!/bin/sh
+# pre-commit hook for ESLint checks and running tests
+
+# Stash non-staged changes to ensure we only check/test staged changes
+STASH_NAME="pre-commit-$(date +%s)"
+git stash push -q --keep-index --include-untracked --message "$STASH_NAME"
+
+# Navigate to the project root directory
+cd "$(git rev-parse --show-toplevel)"
+
+# Run ESLint on staged TypeScript files
+FILES=$(git diff --cached --name-only --diff-filter=d | grep '\.ts$')
+if [ -n "$FILES" ]; then
+  ./node_modules/.bin/eslint $FILES
+  ESLINT_STATUS=$?
+else
+  ESLINT_STATUS=0
+fi
+
+# Run tests
+npm test
+TEST_STATUS=$?
+
+# Reapply stashed changes if they exist
+STASHES=$(git stash list)
+if [[ $STASHES == *"$STASH_NAME"* ]]; then
+  git stash pop -q
+fi
+
+# Check for any lint or test errors
+if [ $ESLINT_STATUS -ne 0 ] || [ $TEST_STATUS -ne 0 ]; then
+  echo "Pre-commit checks failed. Aborting commit."
+  exit 1
+fi
+
+exit 0
