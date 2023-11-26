@@ -1,3 +1,6 @@
+![Tests](https://github.com/scyros/roll-master/actions/workflows/ci.yml/badge.svg)
+![Node.js Version](https://img.shields.io/badge/node-18.x%20%7C%2020.x-brightgreen)
+
 # Roll Master
 
 Roll Master is a library that parses a string and rolls dice to generate results.
