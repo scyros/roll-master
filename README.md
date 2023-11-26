@@ -45,17 +45,16 @@ Multiplication takes precedence over other operations. The remaining operations 
 
 Use parentheses to define blocks, like `(<expression>+(<expression>*<expression>))`. For example, `(4d6+3)*2`.
 
-### Structure of `results`
+### Structure of output
 
-- **`results`**: This object contains the outcome of the dice roll.
-  - **`rolls`**: An array of objects, each representing a single dice roll or a group of dice rolls.
-    - **`roll`**: A string indicating the dice roll expression (e.g., `4d6`).
-    - **`rolls`**: An object where each key (e.g., `d0`, `d1`) represents a die and its value is an object containing:
-      - **`rolls`**: An array of numbers representing the outcomes of that particular die.
-      - **`discarded`** (optional): A boolean indicating if the roll was discarded (e.g., `!2` in `4d6!2`).
-      - **`rerolled`** (optional): A boolean indicating if the roll was rerolled (e.g., `r2` in `4d6r2`).
-    - **`sum`**: The sum of all the dice rolls in this object.
-  - **`result`** (optional): The final result after applying all operations.
+- **`rolls`** (optional): An array of objects, each representing a single dice roll or a group of dice rolls.
+  - **`roll`**: A string indicating the dice roll expression (e.g., `4d6`).
+  - **`rolls`**: An object where each key (e.g., `d0`, `d1`) represents a die and its value is an object containing:
+    - **`rolls`**: An array of numbers representing the outcomes of that particular die.
+    - **`discarded`** (optional): A boolean indicating if the roll was discarded (e.g., `!2` in `4d6!2`).
+    - **`rerolled`** (optional): A boolean indicating if the roll was rerolled (e.g., `r2` in `4d6r2`).
+  - **`sum`**: The sum of all the dice rolls in this object.
+- **`result`** (optional): The final result after applying all operations.
 
 ### Examples
 
@@ -101,11 +100,3 @@ Use parentheses to define blocks, like `(<expression>+(<expression>*<expression>
      "sum": 15
    }
    ```
-
-### Interpretation
-
-- Each roll within `results` details each die's roll and its outcome.
-- The `discarded` and `rerolled` flags provide context on the final sum calculation, especially in complex expressions.
-- The `result` key, when present, shows the final calculation after all operations have been applied.
-
-Understanding this schema is crucial for interpreting the complex expressions of the Roll Master library.
