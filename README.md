@@ -93,9 +93,7 @@ Use parentheses to define blocks, like `(<expression>+(<expression>*<expression>
      "roll": "5d4",
      "rolls": {
        "d0": {"rolls": [4]},
-       "d1": {"rolls": [
-
-1, 4], "rerolled": true},
+       "d1": {"rolls": [1, 4], "rerolled": true},
        "d2": {"rolls": [3]},
        "d3": {"rolls": [2, 1], "rerolled": true, "discarded": true},
        "d4": {"rolls": [4]}
