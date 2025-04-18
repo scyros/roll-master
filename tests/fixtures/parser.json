@@ -199,6 +199,13 @@
     }
   },
   {
+    "expression": "(1)",
+    "tree": {
+      "type": "NUMBER",
+      "value": 1
+    }
+  },
+  {
     "expression": "1d20",
     "tree": {
       "type": "ROLL",

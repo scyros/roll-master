@@ -88,9 +88,7 @@ export default class Roller {
     return results;
   }
 
-  private _getRollResult(result: RollerResult): number {
-    if (result.result) return result.result;
-    if (result.rolls) return result.rolls.reduce((a, b) => a + b.sum, 0);
-    throw new Error("Invalid roll result");
+  private _getRollResult({ result, rolls }: RollerResult): number {
+    return result ?? (rolls ? rolls.reduce((a, b) => a + b.sum, 0) : 0);
   }
 }

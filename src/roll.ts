@@ -67,8 +67,8 @@ export default class Roll {
     if (this.sides < 1) throw new Error("Sides must be greater than 0");
     if (this.reroll > this.count)
       throw new Error("Reroll must be less than or equal to count");
-    if (this.discard >= this.count)
-      throw new Error("Discard must be less than count");
+    if (this.discard > this.count)
+      throw new Error("Discard must be less than or equal to count");
   }
 
   private _getSortedDiceIds(rolls: Rolls, threshold: number) {

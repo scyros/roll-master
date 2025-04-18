@@ -41,7 +41,7 @@
   },
   {
     "expression": "4d6!7",
-    "message": "Discard must be less than count"
+    "message": "Discard must be less than or equal to count"
   },
   {
     "expression": "-4d6",
