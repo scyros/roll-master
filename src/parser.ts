@@ -47,7 +47,7 @@ export default class Parser {
   }
 
   private _parse_rparen() {
-    let branch: Expression | null = this.lastBranch || this._tree;
+    const branch: Expression | null = this.lastBranch || this._tree;
     if (branch.type !== "EXPRESSION")
       throw new Error(
         `Invalid expression ${branch.type}. It should be an expression.`
@@ -58,17 +58,26 @@ export default class Parser {
     if (!branch.right)
       throw new Error(`Invalid expression. Incomplete expression.`);
 
+    // If this group contains an operator or left side, it's not a simple group: just step up
     if (branch.left || branch.operator) {
-      branch = branch.parent || null;
-      this.lastBranch = branch;
+      const parent = branch.parent;
+      this.lastBranch = parent;
       return;
     }
 
-    branch = branch.parent as Expression;
-    if (!branch.right)
-      throw new Error(`Invalid expression. Incomplete expression.`);
-    Object.assign(branch, branch.right, { parent: undefined });
-    this.lastBranch = branch;
+    // Simple parenthesis around a single expression: unwrap it
+    const parent = branch.parent as Expression;
+    const inner = branch.right;
+    if (!inner) throw new Error(`Invalid expression. Incomplete expression.`);
+    // Replace the group node in its parent with the inner expression
+    inner.parent = parent;
+    if (parent.right === branch) {
+      parent.right = inner;
+    } else if (parent.left === branch) {
+      parent.left = inner;
+    }
+    // Continue parsing onto the parent
+    this.lastBranch = parent;
   }
 
   private _parse_roll(token: { type: string; value: string }) {
