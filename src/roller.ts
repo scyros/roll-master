@@ -1,5 +1,8 @@
+import debug from "debug";
 import Parser, { Expression } from "./parser";
 import Roll, { isRollResult, RollOptions, RollResult } from "./roll";
+
+const log = debug("roll-master:roller");
 
 export interface RollerResult {
   result?: number;
@@ -81,10 +84,13 @@ export default class Roller {
     input: string,
     options?: RollOptions
   ): Promise<RollerResult> {
+    log(`rolling "${input}"`);
+    const now = Date.now();
     const tree = this.parser.parse(input);
     if (!tree) throw new Error("Invalid roll expression");
 
     const results = await this.traverse(tree, options || this.options);
+    log(`rolled in ${Date.now() - now}ms`);
     return results;
   }
 

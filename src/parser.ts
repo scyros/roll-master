@@ -1,5 +1,8 @@
+import debug from "debug";
 import Roll from "./roll";
 import Tokenizer from "./tokenizer";
+
+const log = debug("roll-master:parser");
 
 export type OPERATOR = "+" | "-" | "*";
 
@@ -17,13 +20,26 @@ export default class Parser {
   private _tree: Expression = { type: "EXPRESSION" };
   private lastBranch: Expression | null = null;
 
+  private _deepCopy(expression: Expression): Expression {
+    const newExpression: Expression = { type: expression.type };
+    if (expression.left) {
+      newExpression.left = this._deepCopy(expression.left);
+    }
+    if (expression.right) {
+      newExpression.right = this._deepCopy(expression.right);
+    }
+    if (expression.operator) {
+      newExpression.operator = expression.operator;
+    }
+    if (expression.value) {
+      newExpression.value = expression.value;
+    }
+    return newExpression;
+  }
+
   private get tree(): Expression | null {
     if (!this._tree) return null;
-    return JSON.parse(
-      JSON.stringify(this._tree, (k, v) =>
-        k === "parent" ? undefined : v ?? undefined
-      )
-    );
+    return this._deepCopy(this._tree);
   }
 
   private _isBranchReady(branch: Expression): boolean {
@@ -135,13 +151,14 @@ export default class Parser {
   }
 
   public parse(input: string) {
+    log(`parsing "${input}"`);
+    const now = Date.now();
     this.tokenizer.init(input);
     this._tree = { type: "EXPRESSION" };
     this.lastBranch = this._tree;
 
     while (this.tokenizer.hasNext()) {
       const token = this.tokenizer.next();
-      if (token.type === "IGNORE") continue;
 
       if (token.type === "LPAREN") {
         this._parse_lparen();
@@ -174,6 +191,8 @@ export default class Parser {
       this._tree = this._tree.right ?? this._tree;
     }
 
-    return this.tree;
+    const tree = this.tree;
+    log(`parsed in ${Date.now() - now}ms`);
+    return tree;
   }
 }

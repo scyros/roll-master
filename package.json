@@ -5,10 +5,12 @@
   },
   "description": "This is a library designed for rolling dice, which parses instructions based on a specific syntax.",
   "devDependencies": {
+    "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.2.5",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
+    "debug": "^4.4.1",
     "eslint": "^8.42.0",
     "jest": "^29.5.0",
     "semantic-release": "^22.0.8",
