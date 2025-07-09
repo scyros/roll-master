@@ -229,7 +229,8 @@
         "input": "1d20",
         "reroll": 0,
         "sides": 20,
-        "sort": "ASC"
+        "rerollSort": "ASC",
+        "discardSort": "ASC"
       }
     }
   },
@@ -244,7 +245,8 @@
           "input": "1d20",
           "reroll": 0,
           "sides": 20,
-          "sort": "ASC"
+          "rerollSort": "ASC",
+        "discardSort": "ASC"
         }
       },
       "operator": "+",
@@ -265,7 +267,8 @@
         "input": "4d6r1",
         "reroll": 1,
         "sides": 6,
-        "sort": "ASC"
+        "rerollSort": "ASC",
+        "discardSort": "ASC"
       }
     }
   },
@@ -280,7 +283,8 @@
           "input": "4d6r1",
           "reroll": 1,
           "sides": 6,
-          "sort": "ASC"
+          "rerollSort": "ASC",
+        "discardSort": "ASC"
         }
       },
       "operator": "+",
@@ -301,7 +305,8 @@
         "input": "4d6!1s-",
         "reroll": 0,
         "sides": 6,
-        "sort": "DESC"
+        "rerollSort": "ASC",
+        "discardSort": "DESC"
       }
     }
   },
@@ -317,7 +322,8 @@
             "input": "4d6!1",
             "reroll": 0,
             "sides": 6,
-            "sort": "ASC"
+            "rerollSort": "ASC",
+        "discardSort": "ASC"
           }
         },
         "operator": "+",
@@ -346,7 +352,8 @@
           "input": "2d10",
           "reroll": 0,
           "sides": 10,
-          "sort": "ASC"
+          "rerollSort": "ASC",
+        "discardSort": "ASC"
         }
       },
       "operator": "+",
@@ -360,7 +367,8 @@
               "input": "3d4r1",
               "reroll": 1,
               "sides": 4,
-              "sort": "ASC"
+              "rerollSort": "ASC",
+        "discardSort": "ASC"
             }
           },
           "operator": "*",
@@ -372,7 +380,8 @@
               "input": "5d3!2s+",
               "reroll": 0,
               "sides": 3,
-              "sort": "ASC"
+              "rerollSort": "ASC",
+        "discardSort": "ASC"
             }
           },
           "type": "EXPRESSION"

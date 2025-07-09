@@ -35,14 +35,15 @@ export interface RollOptions {
 }
 
 export const ROLL_REGEX =
-  /^(?<count>\d*)d(?<sides>\d+)(r(?<reroll>\d+))?(!(?<discard>\d+))?(s(?<sort>[+-]))?/;
+  /^(?<count>\d*)d(?<sides>\d+)(r(?<reroll>\d+)(s(?<reroll_sort>[+-]))?)?(!(?<discard>\d+)(s(?<discard_sort>[+-]))?)?/;
 
 export default class Roll {
   count: number;
   sides: number;
   reroll = 0;
   discard = 0;
-  sort: Sort = Sort.Ascending;
+  rerollSort: Sort = Sort.Ascending;
+  discardSort: Sort = Sort.Ascending;
 
   constructor(readonly input: string) {
     const match = input.match(ROLL_REGEX);
@@ -52,13 +53,15 @@ export default class Roll {
     const sides = match.groups?.sides ?? "1";
     const reroll = match.groups?.reroll ?? "0";
     const discard = match.groups?.discard ?? "0";
-    const sort = match.groups?.sort ?? "+";
+    const rerollSort = match.groups?.reroll_sort ?? "+";
+    const discardSort = match.groups?.discard_sort ?? "+";
 
     this.count = parseInt(count);
     this.sides = parseInt(sides);
     this.reroll = parseInt(reroll);
     this.discard = parseInt(discard);
-    this.sort = sort === "+" ? Sort.Ascending : Sort.Descending;
+    this.rerollSort = rerollSort === "+" ? Sort.Ascending : Sort.Descending;
+    this.discardSort = discardSort === "+" ? Sort.Ascending : Sort.Descending;
 
     this._validate();
   }
@@ -71,7 +74,11 @@ export default class Roll {
       throw new Error("Discard must be less than or equal to count");
   }
 
-  private _getSortedDiceIds(rolls: Rolls, threshold: number) {
+  private _getSortedDiceIds(
+    rolls: Rolls,
+    threshold: number,
+    sort: Sort
+  ): string[] {
     return Object.keys(rolls)
       .map((key) => ({
         key,
@@ -79,7 +86,7 @@ export default class Roll {
         roll: rolls[key].rolls.at(-1)!,
       }))
       .sort((a, b) =>
-        this.sort === Sort.Ascending ? a.roll - b.roll : b.roll - a.roll
+        sort === Sort.Ascending ? a.roll - b.roll : b.roll - a.roll
       )
       .slice(0, threshold)
       .map(({ key }) => key)
@@ -112,7 +119,11 @@ export default class Roll {
     });
 
     if (this.reroll) {
-      const toReroll = this._getSortedDiceIds(rolls, this.reroll);
+      const toReroll = this._getSortedDiceIds(
+        rolls,
+        this.reroll,
+        this.rerollSort
+      );
 
       (
         await Promise.all(
@@ -136,7 +147,11 @@ export default class Roll {
     }
 
     if (this.discard) {
-      const toDiscard = this._getSortedDiceIds(rolls, this.discard);
+      const toDiscard = this._getSortedDiceIds(
+        rolls,
+        this.discard,
+        this.discardSort
+      );
 
       toDiscard.forEach((diceId) => {
         rolls[diceId] = { ...rolls[diceId], discarded: true };
@@ -159,7 +174,8 @@ export default class Roll {
       sides: this.sides,
       reroll: this.reroll,
       discard: this.discard,
-      sort: this.sort,
+      rerollSort: this.rerollSort,
+      discardSort: this.discardSort,
     };
   }
 
