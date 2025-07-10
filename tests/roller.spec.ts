@@ -66,14 +66,14 @@ describe("Roller", () => {
         const roller = new Roller();
         const rolled = await roller.roll("1d6!1", { roll: rollSpy });
         expect(rolled.rolls).toHaveLength(1);
-        expect(rolled.rolls![0].sum).toBe(0);
+        expect(rolled.rolls?.[0].sum).toBe(0);
       });
       it("should allow discarding all dice for multiple dice", async () => {
         const rollSpy = jest.fn(async () => 5);
         const roller = new Roller();
         const rolled = await roller.roll("4d6!4", { roll: rollSpy });
         expect(rolled.rolls).toHaveLength(1);
-        expect(rolled.rolls![0].sum).toBe(0);
+        expect(rolled.rolls?.[0].sum).toBe(0);
       });
     });
   });

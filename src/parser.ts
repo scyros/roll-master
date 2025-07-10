@@ -139,6 +139,14 @@ export default class Parser {
     }
   }
 
+  private tokenHandlers: Record<string, (token?: any) => void> = {
+    LPAREN: () => this._parse_lparen(),
+    RPAREN: () => this._parse_rparen(),
+    ROLL: (token) => this._parse_roll(token),
+    NUMBER: (token) => this._parse_number(token),
+    OPERATOR: (token) => this._parse_operator(token),
+  };
+
   public parse(input: string) {
     log(`parsing "${input}"`);
     const now = Date.now();
@@ -148,30 +156,9 @@ export default class Parser {
 
     while (this.tokenizer.hasNext()) {
       const token = this.tokenizer.next();
-
-      if (token.type === "LPAREN") {
-        this._parse_lparen();
-        continue;
-      }
-
-      if (token.type === "RPAREN") {
-        this._parse_rparen();
-        continue;
-      }
-
-      if (token.type === "ROLL") {
-        this._parse_roll(token);
-        continue;
-      }
-
-      if (token.type === "NUMBER") {
-        this._parse_number(token);
-        continue;
-      }
-
-      if (token.type === "OPERATOR") {
-        this._parse_operator(token);
-        continue;
+      const handler = this.tokenHandlers[token.type];
+      if (handler) {
+        handler(token);
       }
     }
 

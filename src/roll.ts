@@ -102,22 +102,16 @@ export default class Roll {
     );
   }
 
-  public async roll({
-    roll = async () => Math.floor(Math.random() * this.sides) + 1,
-    repetition = 0,
-  }: RollOptions = {}): Promise<RollResult> {
-    const rolls: Rolls = {};
-
-    (
-      await Promise.all(
-        Array.from(Array(this.count)).map((_, i) =>
-          roll({ index: i, repetition, reroll: false, roll: `d${this.sides}` })
-        )
-      )
-    ).forEach((roll, i) => {
-      rolls[`d${i}`] = { rolls: [roll] };
-    });
-
+  private async _performRerolls(
+    rolls: Rolls,
+    roll: (options: {
+      index: number;
+      repetition: number;
+      reroll: boolean;
+      roll: string;
+    }) => Promise<number>,
+    repetition: number
+  ) {
     if (this.reroll) {
       const toReroll = this._getSortedDiceIds(
         rolls,
@@ -125,19 +119,17 @@ export default class Roll {
         this.rerollSort
       );
 
-      (
-        await Promise.all(
-          toReroll.map(async (diceId, i) => ({
-            id: diceId,
-            roll: await roll({
-              index: i,
-              repetition,
-              reroll: true,
-              roll: `d${this.sides}`,
-            }),
-          }))
-        )
-      ).forEach(({ id, roll }) => {
+      (await Promise.all(
+        toReroll.map(async (diceId, i) => ({
+          id: diceId,
+          roll: await roll({
+            index: i,
+            repetition,
+            reroll: true,
+            roll: `d${this.sides}`,
+          }),
+        }))
+      )).forEach(({ id, roll }) => {
         rolls[id] = {
           ...rolls[id],
           rerolled: true,
@@ -145,7 +137,9 @@ export default class Roll {
         };
       });
     }
+  }
 
+  private _performDiscards(rolls: Rolls) {
     if (this.discard) {
       const toDiscard = this._getSortedDiceIds(
         rolls,
@@ -157,6 +151,25 @@ export default class Roll {
         rolls[diceId] = { ...rolls[diceId], discarded: true };
       });
     }
+  }
+
+  public async roll({
+    roll = async () => Math.floor(Math.random() * this.sides) + 1,
+    repetition = 0,
+  }: RollOptions = {}): Promise<RollResult> {
+    const rolls: Rolls = {};
+
+    (await Promise.all(
+      Array.from(Array(this.count)).map((_, i) =>
+        roll({ index: i, repetition, reroll: false, roll: `d${this.sides}` })
+      )
+    )).forEach((roll, i) => {
+      rolls[`d${i}`] = { rolls: [roll] };
+    });
+
+    await this._performRerolls(rolls, roll, repetition);
+
+    this._performDiscards(rolls);
 
     const sum = this._getFinalRolls(rolls).reduce((a, b) => a + b, 0);
 

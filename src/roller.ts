@@ -32,6 +32,45 @@ export default class Roller {
 
   constructor(private options?: RollOptions) {}
 
+  private async _handleExpression(
+    expression: Expression,
+    options?: RollOptions
+  ): Promise<RollerResult> {
+    const left = await this.traverse(expression.left as Expression, options);
+    const right = await this.traverse(
+      expression.right as Expression,
+      options
+    );
+    const operator = expression.operator as keyof typeof OPERATIONS;
+    const operation = OPERATIONS[operator];
+    if (!operation) throw new Error("Invalid operator");
+
+    if (operator === "..") {
+      if (expression.left?.type !== "ROLL")
+        throw new Error(`Invalid expression. It should be a roll result.`);
+      const result = (operation as RepeatOperation)(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        Roll.fromJSON(expression.left!.value),
+        right.result as number,
+        options
+      );
+      return { rolls: await result };
+    }
+
+    const leftResult = this._getRollResult(left);
+    const rightResult = this._getRollResult(right);
+    const result = (operation as NumberOperation)(
+      leftResult,
+      rightResult
+    ) as number;
+    return {
+      result,
+      rolls: [...(left.rolls || []), ...(right.rolls || [])].filter(
+        isRollResult
+      ) as unknown as RollResult[],
+    };
+  }
+
   private async traverse(
     expression: Expression,
     options?: RollOptions
@@ -43,39 +82,7 @@ export default class Roller {
     if (expression.type === "NUMBER")
       return { result: expression.value as number };
     if (expression.type === "EXPRESSION") {
-      const left = await this.traverse(expression.left as Expression, options);
-      const right = await this.traverse(
-        expression.right as Expression,
-        options
-      );
-      const operator = expression.operator as keyof typeof OPERATIONS;
-      const operation = OPERATIONS[operator];
-      if (!operation) throw new Error("Invalid operator");
-
-      if (operator === "..") {
-        if (expression.left?.type !== "ROLL")
-          throw new Error(`Invalid expression. It should be a roll result.`);
-        const result = (operation as RepeatOperation)(
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          Roll.fromJSON(expression.left!.value),
-          right.result as number,
-          options
-        );
-        return { rolls: await result };
-      }
-
-      const leftResult = this._getRollResult(left);
-      const rightResult = this._getRollResult(right);
-      const result = (operation as NumberOperation)(
-        leftResult,
-        rightResult
-      ) as number;
-      return {
-        result,
-        rolls: [...(left.rolls || []), ...(right.rolls || [])].filter(
-          isRollResult
-        ) as unknown as RollResult[],
-      };
+      return this._handleExpression(expression, options);
     }
     throw new Error(`Invalid expression "${expression.type}"`);
   }
