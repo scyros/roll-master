@@ -42,24 +42,17 @@ export default class Parser {
     return this._deepCopy(this._tree);
   }
 
-  private _isBranchReady(branch: Expression): boolean {
-    if (branch.type !== "EXPRESSION") return false;
-    if (!branch.right) return false;
-    if (!branch.left) return false;
-    if (!branch.operator) return false;
-    return true;
-  }
-
   private _parse_lparen() {
-    let branch = this.lastBranch || this._tree;
+    const branch = this.lastBranch || this._tree;
     if (branch.type !== "EXPRESSION")
       throw new Error(
         `Invalid expression ${branch.type}. It should be an expression.`
       );
+    if (branch.right)
+      throw new Error(`Invalid expression. Dangling parenthesis.`);
     branch.right = { type: "EXPRESSION" };
     branch.right.parent = branch;
-    branch = branch.right;
-    this.lastBranch = branch;
+    this.lastBranch = branch.right;
   }
 
   private _parse_rparen() {
@@ -89,8 +82,6 @@ export default class Parser {
     inner.parent = parent;
     if (parent.right === branch) {
       parent.right = inner;
-    } else if (parent.left === branch) {
-      parent.left = inner;
     }
     // Continue parsing onto the parent
     this.lastBranch = parent;
@@ -98,8 +89,7 @@ export default class Parser {
 
   private _parse_roll(token: { type: string; value: string }) {
     const branch = this.lastBranch || this._tree;
-    if (this._isBranchReady(branch))
-      throw new Error(`Invalid expression. Dangling roll.`);
+    if (branch.right) throw new Error(`Invalid expression. Dangling roll.`);
 
     const roll = new Roll(token.value);
     branch.right = { type: "ROLL", value: roll };
@@ -108,8 +98,7 @@ export default class Parser {
 
   private _parse_number(token: { type: string; value: string }) {
     const branch = this.lastBranch || this._tree;
-    if (this._isBranchReady(branch))
-      throw new Error(`Invalid expression. Dangling number.`);
+    if (branch.right) throw new Error(`Invalid expression. Dangling number.`);
 
     branch.right = { type: "NUMBER", value: +token.value };
     this.lastBranch = branch;
@@ -189,6 +178,14 @@ export default class Parser {
     // Remove empty branches from parentheses
     if (this._tree.right && !this._tree.left && !this._tree.operator) {
       this._tree = this._tree.right ?? this._tree;
+    }
+
+    if (this.lastBranch?.parent) {
+      throw new Error("Invalid expression. Incomplete expression.");
+    }
+
+    if (this.lastBranch?.operator && !this.lastBranch?.right) {
+      throw new Error("Invalid expression. Incomplete expression.");
     }
 
     const tree = this.tree;

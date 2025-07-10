@@ -32,6 +32,14 @@ describe("Roller", () => {
     }
   );
 
+  it("should throw an error for an invalid expression type", async () => {
+    const roller = new Roller();
+    (roller as any).parser.parse = () => ({ type: "INVALID" });
+    await expect(roller.roll("1+1")).rejects.toThrow(
+      'Invalid expression "INVALID"'
+    );
+  });
+
   describe("zero-result edge cases", () => {
     it("should return 0 for simple numeric subtraction resulting in zero", async () => {
       const roller = new Roller();

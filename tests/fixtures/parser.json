@@ -403,5 +403,97 @@
       },
       "type": "EXPRESSION"
     }
+  },
+  {
+    "expression": "(1d6)",
+    "tree": {
+      "type": "ROLL",
+      "value": {
+        "count": 1,
+        "discard": 0,
+        "input": "1d6",
+        "reroll": 0,
+        "sides": 6,
+        "rerollSort": "ASC",
+        "discardSort": "ASC"
+      }
+    }
+  },
+  {
+    "expression": "(1d6) + 2",
+    "tree": {
+      "left": {
+        "type": "ROLL",
+        "value": {
+          "count": 1,
+          "discard": 0,
+          "input": "1d6",
+          "reroll": 0,
+          "sides": 6,
+          "rerollSort": "ASC",
+          "discardSort": "ASC"
+        }
+      },
+      "operator": "+",
+      "right": {
+        "type": "NUMBER",
+        "value": 2
+      },
+      "type": "EXPRESSION"
+    }
+  },
+  {
+    "expression": "1*2+3",
+    "tree": {
+      "left": {
+        "left": {
+          "type": "NUMBER",
+          "value": 1
+        },
+        "operator": "*",
+        "right": {
+          "type": "NUMBER",
+          "value": 2
+        },
+        "type": "EXPRESSION"
+      },
+      "operator": "+",
+      "right": {
+        "type": "NUMBER",
+        "value": 3
+      },
+      "type": "EXPRESSION"
+    }
+  },
+  {
+    "expression": "1d6 + (2d6)",
+    "tree": {
+      "left": {
+        "type": "ROLL",
+        "value": {
+          "count": 1,
+          "discard": 0,
+          "input": "1d6",
+          "reroll": 0,
+          "sides": 6,
+          "rerollSort": "ASC",
+          "discardSort": "ASC"
+        }
+      },
+      "operator": "+",
+      "right": {
+        "type": "ROLL",
+        "value": {
+          "count": 2,
+          "discard": 0,
+          "input": "2d6",
+          "reroll": 0,
+          "sides": 6,
+          "rerollSort": "ASC",
+          "discardSort": "ASC"
+        }
+      },
+      "type": "EXPRESSION"
+    }
   }
 ]
