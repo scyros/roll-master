@@ -6,6 +6,9 @@ const log = debug("roll-master:parser");
 
 export type OPERATOR = "+" | "-" | "*";
 
+/**
+ * Represents a mathematical expression.
+ */
 export interface Expression {
   type: "EXPRESSION" | "ROLL" | "NUMBER";
   left?: Expression | null;
@@ -15,6 +18,9 @@ export interface Expression {
   parent?: Expression | null;
 }
 
+/**
+ * The Parser class is responsible for parsing a string input and converting it into an expression tree.
+ */
 export default class Parser {
   private tokenizer = new Tokenizer();
   private _tree: Expression = { type: "EXPRESSION" };
@@ -113,6 +119,7 @@ export default class Parser {
       throw new Error(`Invalid expression. Incomplete expression.`);
 
     if (branch.left && branch.right) {
+      // If the operator is a + or -, we need to wrap the current branch in a new branch
       if (["+", "-", ".."].includes(token.value)) {
         branch = {
           type: "EXPRESSION",
@@ -125,6 +132,7 @@ export default class Parser {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         Object.assign(this.lastBranch!, branch);
       } else {
+        // Otherwise, we create a new branch to the right of the current branch
         branch.right = {
           type: "EXPRESSION",
           operator: token.value as OPERATOR,
@@ -133,6 +141,7 @@ export default class Parser {
         this.lastBranch = branch.right;
       }
     } else {
+      // If there is no left branch, we can just add the operator to the current branch
       branch.operator = token.value as OPERATOR;
       branch.left = branch.right;
       branch.right = undefined;

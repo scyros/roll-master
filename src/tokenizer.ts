@@ -1,5 +1,8 @@
 import { ROLL_REGEX } from "./roll";
 
+/**
+ * Represents a token.
+ */
 export interface Token {
   type: string;
   value: string;
@@ -28,6 +31,9 @@ const Spec: [RegExp, string][] = [
   [/^(\d+)/, "NUMBER"],
 ];
 
+/**
+ * The Tokenizer class is responsible for breaking a string into tokens.
+ */
 export default class Tokenizer {
   private cursor = 0;
   private input = "";

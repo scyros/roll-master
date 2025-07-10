@@ -3,7 +3,72 @@
 
 # Roll Master
 
-Roll Master is a library that parses a string and rolls dice to generate results.
+# roll-master
+
+This is a library designed for rolling dice, which parses instructions based on a specific syntax.
+
+## Features
+
+- Parses complex dice expressions
+- Supports standard dice notation (e.g., `d20`, `2d6`, `4d6r1!1`)
+- Supports arithmetic operators (`+`, `-`, `*`)
+- Supports repeating rolls (`..`)
+- Supports rerolling dice (`r`)
+- Supports discarding dice (`!`)
+- Provides detailed roll results
+
+## Installation
+
+```bash
+npm install roll-master
+```
+
+## Usage
+
+```typescript
+import Roller from 'roll-master';
+
+const roller = new Roller();
+
+// Roll a single d20
+roller.roll('d20').then(result => {
+  console.log(result);
+});
+
+// Roll 2d6 and add 5
+roller.roll('2d6+5').then(result => {
+  console.log(result);
+});
+
+// Roll 4d6, reroll 1s, and discard the lowest roll
+roller.roll('4d6r1!1').then(result => {
+  console.log(result);
+});
+```
+
+## API
+
+### `Roller`
+
+The `Roller` class is the main entry point for using the library. It provides a `roll` method that takes a dice expression as input and returns a promise that resolves with the roll result.
+
+#### `roll(expression: string): Promise<RollerResult>`
+
+- `expression`: The dice expression to roll.
+
+Returns a promise that resolves with a `RollerResult` object.
+
+### `RollerResult`
+
+- `result`: The final result of the roll.
+- `rolls`: An array of `RollResult` objects, one for each roll in the expression.
+
+### `RollResult`
+
+- `roll`: The dice expression for the roll.
+- `rolls`: An object containing the individual dice rolls.
+- `sum`: The sum of the dice rolls.
+
 
 ## Usage
 

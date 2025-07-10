@@ -75,15 +75,19 @@ export default class Roller {
     expression: Expression,
     options?: RollOptions
   ): Promise<RollerResult> {
+    // Handle roll expressions
     if (expression.type === "ROLL") {
       const roll = Roll.fromJSON(expression.value as Roll);
       return { rolls: [await roll.roll(options)] };
     }
+    // Handle number expressions
     if (expression.type === "NUMBER")
       return { result: expression.value as number };
+    // Handle expression branches
     if (expression.type === "EXPRESSION") {
       return this._handleExpression(expression, options);
     }
+    // Handle invalid expressions
     throw new Error(`Invalid expression "${expression.type}"`);
   }
 

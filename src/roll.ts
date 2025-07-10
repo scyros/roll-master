@@ -8,12 +8,20 @@ export type Rolls = Record<
   { rerolled?: boolean; rolls: number[]; discarded?: boolean }
 >;
 
+/**
+ * Represents the result of a roll.
+ */
 export interface RollResult {
   roll: string;
   rolls: Rolls;
   sum: number;
 }
 
+/**
+ * Checks if a result is a RollResult.
+ * @param result The result to check.
+ * @returns True if the result is a RollResult, false otherwise.
+ */
 export function isRollResult(result: unknown): result is RollResult {
   return (
     typeof result === "object" &&
@@ -24,6 +32,9 @@ export function isRollResult(result: unknown): result is RollResult {
   );
 }
 
+/**
+ * Represents the options for a roll.
+ */
 export interface RollOptions {
   roll?: (options: {
     index: number;
@@ -37,6 +48,9 @@ export interface RollOptions {
 export const ROLL_REGEX =
   /^(?<count>\d*)d(?<sides>\d+)(r(?<reroll>\d+)(s(?<reroll_sort>[+-]))?)?(!(?<discard>\d+)(s(?<discard_sort>[+-]))?)?/;
 
+/**
+ * The Roll class is responsible for parsing a dice expression and rolling the dice.
+ */
 export default class Roll {
   count: number;
   sides: number;
@@ -159,6 +173,7 @@ export default class Roll {
   }: RollOptions = {}): Promise<RollResult> {
     const rolls: Rolls = {};
 
+    // Roll the initial dice
     (await Promise.all(
       Array.from(Array(this.count)).map((_, i) =>
         roll({ index: i, repetition, reroll: false, roll: `d${this.sides}` })
@@ -167,10 +182,13 @@ export default class Roll {
       rolls[`d${i}`] = { rolls: [roll] };
     });
 
+    // Reroll the dice if necessary
     await this._performRerolls(rolls, roll, repetition);
 
+    // Discard the dice if necessary
     this._performDiscards(rolls);
 
+    // Sum the final rolls
     const sum = this._getFinalRolls(rolls).reduce((a, b) => a + b, 0);
 
     return {
